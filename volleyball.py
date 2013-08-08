@@ -45,7 +45,7 @@ def getHomePairs():
 	pairs = []
 	for l in linkages:
 		ll = l.strip().split(',')
-		pairs.append( (ll[0],ll[1]) )
+		pairs.append( (int(ll[0]),int(ll[1])) )
 	return pairs
 
 def getGyms():
@@ -272,11 +272,16 @@ def oneByeInARow():
 def bothPlayHome():
 	print "// bothPlayHome"
 	for t in weeks:
-		for g in gyms:
-			for p in homePairs:
-				i = p[0]
-				j = p[1]
-				print gymSelection(t,i,g) + " = " + gymSelection(t,j,g) + ";"
+		for p in homePairs:
+			i = p[0]
+			j = p[1]
+			ig = []
+			jg = []
+			for g in gyms:
+				ig.append(gymSelection(t,i,g) + " " + str(homeGym(t,i,g)))
+				jg.append(gymSelection(t,j,g) + " " + str(homeGym(t,j,g)))
+			print " + ".join(ig) + " = " + " + ".join(jg) + ";"
+
 def mustPlayHome():
 	print "// mustPlayHome"
 	g = []
