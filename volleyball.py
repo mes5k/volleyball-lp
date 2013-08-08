@@ -44,11 +44,12 @@ f.close()
 def getHomePairs():
 	pairs = []
 	for l in linkages:
-		pairs.append( (l[0],l[1]) )
+		ll = l.strip().split(',')
+		pairs.append( (ll[0],ll[1]) )
 	return pairs
 
 def getGyms():
-	x = gymMatrix[0]
+	x = gymMatrix[5]
 	y = x[1:-1] 
 	z = [int(i) for i in y]
 	return z 
@@ -108,7 +109,7 @@ def homeGym(t,i,g):
 	if g in exclusionMap and exclusionMap[g] == t:
 		return 0
 	else:
-		return int(gymMatrix[i+2][g])
+		return int(gymMatrix[i+7][g])
 
 def expectedGames(i,j):
 	if teamList[i+1][2] == teamList[j+1][2]:
@@ -275,7 +276,7 @@ def bothPlayHome():
 			for p in homePairs:
 				i = p[0]
 				j = p[1]
-				print gymSelection(t,i,g) + " = " + gymSelection(t,j,g)
+				print gymSelection(t,i,g) + " = " + gymSelection(t,j,g) + ";"
 def mustPlayHome():
 	print "// mustPlayHome"
 	g = []
@@ -284,7 +285,8 @@ def mustPlayHome():
 			i = h[0]
 			t = h[1]
 			g.append(game(i,j,t))
-	print " + ".join(g) + " = 1" + ";"
+	if len(g) > 0:
+		print " + ".join(g) + " = 1" + ";"
 
 def mustSchedules():
 	print "// mustSchedules"
