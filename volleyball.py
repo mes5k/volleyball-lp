@@ -70,7 +70,7 @@ def getTeams():
 	return [int(t[0]) for t in tl]
 
 # index sets
-weeks = [i+1 for i in xrange(len(teamList) - 2)] 
+weeks = [i+1 for i in xrange(10)] 
 
 teams = getTeams() 
 divisions = getDivisions() 
@@ -83,10 +83,10 @@ specificMatches = [] #[(1,2,3)] # (team,team,week)
 
 # decision variables
 def game(i,j,t):
-	return "game_" + str(i) + "_" + str(j) + "_t" + str(t);
+	return "game_team" + str(i) + "_team" + str(j) + "_week" + str(t);
 
 def gymSelection(t,i,g):
-	return "gymSelection_t" + str(t) + "_" + str(i) + "_g" + str(g);
+	return "gymSelection_week" + str(t) + "_team" + str(i) + "_gym" + str(g);
 
 def z(i,j):
 	return "z_" + str(i) + "_" + str(j) 
@@ -264,23 +264,18 @@ def oneByeInARow():
 					g.append(game(j,i,weeks[x+1]))
 			print " + ".join(g) + " >= 1" + ";"
 
-# TODO not totally sure how p fits in here
+#
+# Note that this is my interpretation of bothPlayHome, because I believe
+# that the document contains a typo and mistakenly duplicates oneByeInARow. 
+#
 def bothPlayHome():
 	print "// bothPlayHome"
-	for x in range(len(weeks)):
-		if ( x >= len(weeks) - 1 ):
-			continue
-		g = []
-		for p in homePairs:
-			i = p[0]
-			j = p[1]
-			if (i != j):
-				g.append(game(i,j,weeks[x]))
-				g.append(game(i,j,weeks[x+1]))
-				g.append(game(j,i,weeks[x]))
-				g.append(game(j,i,weeks[x+1]))
-		print " + ".join(g) + " >= 1" + ";"
-
+	for t in weeks:
+		for g in gyms:
+			for p in homePairs:
+				i = p[0]
+				j = p[1]
+				print gymSelection(t,i,g) + " = " + gymSelection(t,j,g)
 def mustPlayHome():
 	print "// mustPlayHome"
 	g = []
